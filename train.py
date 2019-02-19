@@ -11,10 +11,10 @@ from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_
 class Trainer:
     def split_to_train_test_sets(self, wines):
         # Specify the data
-        X = wines.ix[:, 0:11]
+        X = wines.ix[:, 2:wines.shape[1]]
 
         # Specify the target labels and flatten the array
-        y = np.ravel(wines.type)
+        y = np.ravel(wines.target)
 
         # Split the data up in train and test sets
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
@@ -32,8 +32,8 @@ class Trainer:
 
         return X_train, X_test
 
-    def get_model(self, X_train, y_train):
-        model_path = './wine_model.h5'
+    def get_model(self, x_train, y_train):
+        model_path = './vod_music_model.h5'
         print(os.path.abspath(model_path))
         if os.path.isfile(model_path):
             model = keras.models.load_model(model_path);
@@ -41,7 +41,7 @@ class Trainer:
             model = Sequential()
 
             # Add an input layer
-            model.add(Dense(12, activation='relu', input_shape=(11,)))
+            model.add(Dense(64, activation='relu', input_shape=(x_train.shape[1],)))
 
             # Add one hidden layer
             model.add(Dense(8, activation='relu'))
@@ -54,12 +54,12 @@ class Trainer:
             model.get_weights()
 
             model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-            model.fit(X_train, y_train, epochs=20, batch_size=1, verbose=1)
+            model.fit(x_train, y_train, epochs=5, batch_size=1, verbose=1)
             model.save(model_path)
         return model
 
-    def train(self, X_train, y_train):
-        model = self.get_model(X_train, y_train)
+    def train(self, x_train, y_train):
+        model = self.get_model(x_train, y_train)
         return model
 
     def calc_additional(self, y_test, y_pred):
@@ -82,6 +82,3 @@ class Trainer:
         # Cohen's kappa
         cks = cohen_kappa_score(y_test, y_pred)
         print("Cohen's kappa: " + str(cks))
-
-
-

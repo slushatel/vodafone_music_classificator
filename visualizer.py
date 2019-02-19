@@ -82,9 +82,9 @@ class Vizualizer:
 
     def plot_corelation_matrix(self, wines):
         corr = wines.corr()
+        sns.set()
         sns.heatmap(corr,
                     xticklabels=corr.columns.values,
                     yticklabels=corr.columns.values)
-        sns.set()
-        # TODO use seaborn's palette
+        # # TODO use seaborn's palette
         plt.show()
