@@ -86,8 +86,11 @@ y_pred = model.predict(x_test[corframe.values[0:n_features, 0]])
 # vis.Vizualizer().plot_distribution(y_pred.round())
 print(y_pred[:5])
 print(y_test[:5])
+
+cor_test = scipy.stats.stats.pearsonr(y_test, np.transpose(y_pred.round())[0])[0]
+
 #
-score = model.evaluate(x_test, y_test, verbose=1)
+score = model.evaluate(x_test[corframe.values[0:n_features, 0]], y_test, verbose=1)
 print(score)
 #
 # train.Trainer().calc_additional(y_test, y_pred.round())
