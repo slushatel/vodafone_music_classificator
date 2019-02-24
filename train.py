@@ -54,7 +54,7 @@ class Trainer:
             model.get_weights()
 
             model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-            model.fit(x_train, y_train, epochs=20, batch_size=1, verbose=1)
+            model.fit(x_train, y_train, epochs=10, batch_size=1, verbose=1, validation_split=0.5)
             model.save(model_path)
         return model
 
