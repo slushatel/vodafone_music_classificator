@@ -41,10 +41,10 @@ class Trainer:
             model = Sequential()
 
             # Add an input layer
-            model.add(Dense(64, activation='relu', input_shape=(x_train.shape[1],)))
+            model.add(Dense(x_train.shape[1], activation='relu', input_shape=(x_train.shape[1],)))
 
             # Add one hidden layer
-            model.add(Dense(8, activation='relu'))
+            model.add(Dense(round((x_train.shape[1] + 1) / 2), activation='relu'))
 
             # Add an output layer
             model.add(Dense(1, activation='sigmoid'))
@@ -54,7 +54,7 @@ class Trainer:
             model.get_weights()
 
             model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-            model.fit(x_train, y_train, epochs=5, batch_size=1, verbose=1)
+            model.fit(x_train, y_train, epochs=20, batch_size=1, verbose=1)
             model.save(model_path)
         return model
 
