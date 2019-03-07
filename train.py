@@ -17,7 +17,7 @@ class Trainer:
         y = np.ravel(wines.target)
 
         # Split the data up in train and test sets
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
         return X_train, X_test, y_train, y_test
 
     def standartize_data(self, X_train, X_test):
@@ -44,7 +44,8 @@ class Trainer:
             model.add(Dense(x_train.shape[1], activation='relu', input_shape=(x_train.shape[1],)))
 
             # Add one hidden layer
-            model.add(Dense(round((x_train.shape[1] + 1) / 2), activation='relu'))
+            # model.add(Dense(round((x_train.shape[1] + 1) / 2), activation='relu'))
+            model.add(Dense(8, activation='relu'))
 
             # Add an output layer
             model.add(Dense(1, activation='sigmoid'))
