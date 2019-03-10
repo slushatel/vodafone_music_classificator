@@ -6,7 +6,7 @@ from sklearn.metrics import r2_score
 import scipy
 
 # Read in white wine data
-train_data = pd.read_csv("c:/Downloads/Vodafone Music Challenge/Data/train_music.csv", sep=',')
+train_data = pd.read_csv("data/train_music.csv", sep=',')
 # print(train_data.info())
 # print(train_data.sample(5))
 # print(train_data.describe())
