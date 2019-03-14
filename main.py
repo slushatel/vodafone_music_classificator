@@ -1,6 +1,6 @@
 import pandas as pd
-import visualizer as vis
 import numpy as np
+import visualizer as vis
 import train as train
 from sklearn.metrics import r2_score
 import scipy

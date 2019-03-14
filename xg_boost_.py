@@ -1,5 +1,6 @@
 import pandas as pd
 import xgboost
+import numpy as np
 
 import train as train
 from sklearn.metrics import accuracy_score
@@ -8,6 +9,7 @@ from sklearn import metrics
 import matplotlib.pyplot as plt
 import scipy
 import os
+import visualizer as vis
 
 train_data = pd.read_csv("data/train_music.csv", sep=',')
 
@@ -26,22 +28,25 @@ x_train, x_test, y_train, y_test = train.Trainer().split_to_train_test_sets(trai
 # fit model no training data
 model_path = './vod_music_model.xgb'
 print(os.path.abspath(model_path))
-if os.path.isfile(model_path):
-    model = xgboost.load_model(model_path)
-else:
-    model = XGBClassifier()
-    model.fit(x_train, y_train)
-    xgboost.save_model(model_path, model)
+# if os.path.isfile(model_path):
+#     model = xgboost.load_model(model_path)
+# else:
+model = XGBClassifier()
+model.fit(x_train, y_train)
+    # xgboost.save_model(model_path, model)
 
 # make predictions for test data
-y_pred = model.predict(x_test)
-y_pred = [round(value) for value in y_pred]
+y_pred0 = model.predict(x_test)
+y_pred = [round(value) for value in y_pred0]
 # evaluate predictions
 accuracy = accuracy_score(y_test, y_pred)
 print("Accuracy: %.2f%%" % (accuracy * 100.0))
 
 cor_test = scipy.stats.stats.pearsonr(y_test, y_pred)[0]
 print("Correlation: %.2f%%" % (cor_test * 100.0))
+vis.Vizualizer().plot_distribution(y_test)
+vis.Vizualizer().plot_distribution(y_pred)
+vis.Vizualizer().plot_distribution(y_pred0)
 
 
 fpr, tpr, _ = metrics.roc_curve(y_test, y_pred)

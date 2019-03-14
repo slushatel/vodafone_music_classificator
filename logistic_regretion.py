@@ -26,7 +26,10 @@ clf = LogisticRegression(penalty='l2', C=0.1, class_weight='balanced', solver='l
 clf.fit(x_train, y_train)
 y_pred = clf.predict(x_test)
 
-print("Accuracy", metrics.accuracy_score(y_test, y_pred))
+cor_test = scipy.stats.stats.pearsonr(y_test*2-1, y_pred*2-1)[0]
+print("correlation", cor_test)
+
+print("Accuracy", metrics.accuracy_score   (y_test, y_pred))
 y_pred_proba = clf.predict_proba(x_test)[::, 1]
 fpr, tpr, _ = metrics.roc_curve(y_test, y_pred_proba)
 auc = metrics.roc_auc_score(y_test, y_pred_proba)
