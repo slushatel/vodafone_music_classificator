@@ -87,8 +87,10 @@ class Vizualizer:
                     xticklabels=corr.columns.values,
                     yticklabels=corr.columns.values)
         # # TODO use seaborn's palette
+        plt.interactive(False)
         plt.show()
 
     def plot_distribution(self, x):
+        plt.interactive(False)
         sns.distplot(x)
 
