@@ -6,3 +6,4 @@ matplotlib
 sklearn
 xgboost
 graphviz
+tflearn

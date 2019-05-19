@@ -93,4 +93,5 @@ class Vizualizer:
     def plot_distribution(self, x):
         plt.interactive(False)
         sns.distplot(x)
+        plt.show()
 

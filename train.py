@@ -1,3 +1,5 @@
+import tflearn as tflearn
+from keras import losses
 from sklearn.model_selection import train_test_split
 import numpy as np
 from sklearn.preprocessing import StandardScaler
@@ -6,6 +8,9 @@ from keras.layers import Dense
 import os
 import keras.models
 from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score, cohen_kappa_score
+import tensorflow as tf
+from sklearn.metrics import roc_auc_score
+import keras.backend as K
 
 
 class Trainer:
@@ -36,14 +41,13 @@ class Trainer:
         model_path = './vod_music_model.h5'
         print(os.path.abspath(model_path))
         if os.path.isfile(model_path):
-            model = keras.models.load_model(model_path);
+            model = keras.models.load_model(model_path)
         else:
             model = Sequential()
 
             # Add an input layer
             model.add(Dense(x_train.shape[1], activation='relu', input_shape=(x_train.shape[1],)))
 
-            # Add one hidden layer
             # model.add(Dense(round((x_train.shape[1] + 1) / 2), activation='relu'))
             model.add(Dense(8, activation='relu'))
 
@@ -54,9 +58,19 @@ class Trainer:
             model.get_config()
             model.get_weights()
 
-            model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-            model.fit(x_train, y_train, epochs=10, batch_size=256, verbose=1, validation_split=0.5)
-            model.save(model_path)
+            def auc_roc(y_true, y_pred):
+                return tf.py_func(roc_auc_score, (y_true, y_pred), tf.double)
+
+            def roc_auc_score(y_true, y_pred):
+                y_true = K.eval(y_true)
+                y_pred = K.eval(y_pred)
+                return K.variable(1.)
+                # return K.variable(1. - tflearn.objectives.roc_auc_score(y_pred, y_true))
+
+            model.compile(loss=roc_auc_score, optimizer='adam', metrics=[auc_roc])
+            # model.compile(loss=losses.binary_crossentropy, optimizer='adam', metrics=['accuracy', auc_roc])
+            model.fit(x_train, y_train, epochs=10, batch_size=256, verbose=1, validation_split=0.3)
+            # model.save(model_path)
         return model
 
     def train(self, x_train, y_train):

@@ -22,14 +22,14 @@ train_data = pd.read_csv("data/train_music.csv", sep=',')
 train_data.fillna(train_data.mean(), inplace=True)
 
 x_train, x_test, y_train, y_test = train.Trainer().split_to_train_test_sets(train_data)
-clf = LogisticRegression(penalty='l2', C=0.1, class_weight='balanced', solver='liblinear')
+clf = LogisticRegression(penalty='l2', C=1, class_weight='balanced', solver='liblinear')
 clf.fit(x_train, y_train)
 y_pred = clf.predict(x_test)
 
-cor_test = scipy.stats.stats.pearsonr(y_test*2-1, y_pred*2-1)[0]
+cor_test = scipy.stats.stats.pearsonr(y_test * 2 - 1, y_pred * 2 - 1)[0]
 print("correlation", cor_test)
 
-print("Accuracy", metrics.accuracy_score   (y_test, y_pred))
+print("Accuracy", metrics.accuracy_score(y_test, y_pred))
 y_pred_proba = clf.predict_proba(x_test)[::, 1]
 fpr, tpr, _ = metrics.roc_curve(y_test, y_pred_proba)
 auc = metrics.roc_auc_score(y_test, y_pred_proba)
